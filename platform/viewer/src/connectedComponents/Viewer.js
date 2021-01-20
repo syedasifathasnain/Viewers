@@ -7,6 +7,7 @@ import { withDialog } from '@ohif/ui';
 import moment from 'moment';
 import ConnectedHeader from './ConnectedHeader.js';
 import ToolbarRow from './ToolbarRow.js';
+import SlideLeftPanel from './SlideLeftPanel.js';
 import ConnectedStudyBrowser from './ConnectedStudyBrowser.js';
 import ConnectedViewerMain from './ConnectedViewerMain.js';
 import SidePanel from './../components/SidePanel.js';
@@ -327,7 +328,44 @@ class Viewer extends Component {
                 )}
             </SidePanel>
           </ErrorBoundaryDialog>
+          <ErrorBoundaryDialog context="ToolbarRow">
+            <SlideLeftPanel
+              isLeftSidePanelOpen={this.state.isLeftSidePanelOpen}
+              isRightSidePanelOpen={this.state.isRightSidePanelOpen}
+              selectedLeftSidePanel={
+                this.state.isLeftSidePanelOpen
+                  ? this.state.selectedLeftSidePanel
+                  : ''
+              }
+              selectedRightSidePanel={
+                this.state.isRightSidePanelOpen
+                  ? this.state.selectedRightSidePanel
+                  : ''
+              }
+              handleSidePanelChange={(side, selectedPanel) => {
+                const sideClicked = side && side[0].toUpperCase() + side.slice(1);
+                const openKey = `is${sideClicked}SidePanelOpen`;
+                const selectedKey = `selected${sideClicked}SidePanel`;
+                const updatedState = Object.assign({}, this.state);
 
+                const isOpen = updatedState[openKey];
+                const prevSelectedPanel = updatedState[selectedKey];
+                // RoundedButtonGroup returns `null` if selected button is clicked
+                const isSameSelectedPanel =
+                  prevSelectedPanel === selectedPanel || selectedPanel === null;
+
+                updatedState[selectedKey] = selectedPanel || prevSelectedPanel;
+
+                const isClosedOrShouldClose = !isOpen || isSameSelectedPanel;
+                if (isClosedOrShouldClose) {
+                  updatedState[openKey] = !updatedState[openKey];
+                }
+
+                this.setState(updatedState);
+              }}
+              studies={this.props.studies}
+            />
+          </ErrorBoundaryDialog>
           {/* MAIN */}
           <div className={classNames('main-content')}>
             <ErrorBoundaryDialog context="ViewerMain">

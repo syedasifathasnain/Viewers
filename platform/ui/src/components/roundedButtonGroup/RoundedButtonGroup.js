@@ -68,12 +68,12 @@ class RoundedButtonGroup extends Component {
           className={className}
           onClick={() => this.onClickOption(option.value)}
         >
-          <div className="roundedButton">
+          <div className="roundedButton" style={{ borderBottomRightRadius: '0px', borderTopRightRadius: '0px', padding: '0 0px' }}>
             {optionText}
             {iconProps && <Icon {...iconProps} />}
           </div>
-          {bottomLabel}
-        </div>
+          { bottomLabel}
+        </div >
       );
     });
 

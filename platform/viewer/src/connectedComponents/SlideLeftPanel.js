@@ -18,7 +18,7 @@ import ConnectedCineDialog from './ConnectedCineDialog';
 import ConnectedLayoutButton from './ConnectedLayoutButton';
 import { withAppContext } from '../context/AppContext';
 
-class ToolbarRow extends Component {
+class SlideLeftPanel extends Component {
   // TODO: Simplify these? isOpen can be computed if we say "any" value for selected,
   // closed if selected is null/undefined
   static propTypes = {
@@ -102,11 +102,11 @@ class ToolbarRow extends Component {
     });
 
     // TODO: This should come from extensions, instead of being baked in
-    // this.buttonGroups.left.unshift({
-    //   value: 'studies',
-    //   icon: 'th-large',
-    //   bottomLabel: this.props.t('Series'),
-    // });
+    this.buttonGroups.left.unshift({
+      value: 'studies',
+      icon: 'angle-left',
+      // bottomLabel: this.props.t('Series'),
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -178,15 +178,15 @@ class ToolbarRow extends Component {
 
     return (
       <>
-        <div className="ToolbarRow">
-          <div className="pull-left m-t-1 p-y-1" style={{ padding: '10px' }}>
-            <RoundedButtonGroup
-              options={this.buttonGroups.left}
-              value={this.props.selectedLeftSidePanel || ''}
-              onValueChanged={onPressLeft}
-            />
-          </div>
-          {buttonComponents}
+        {/* <div className="ToolbarRow"> */}
+        {/* <div className="pull-left m-t-1 p-y-1" style={{ padding: '10px' }}> */}
+        <RoundedButtonGroup
+          options={this.buttonGroups.left}
+          value={this.props.selectedLeftSidePanel || ''}
+          onValueChanged={onPressLeft}
+        />
+        {/* </div> */}
+        {/* {buttonComponents}
           <ConnectedLayoutButton />
           <div
             className="pull-right m-t-1 rm-x-1"
@@ -199,8 +199,8 @@ class ToolbarRow extends Component {
                 onValueChanged={onPressRight}
               />
             )}
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </>
     );
   }
@@ -274,15 +274,15 @@ function _getButtonComponents(toolbarButtons, activeButtons) {
     const hasCustomComponent = button.CustomComponent;
     const hasNestedButtonDefinitions = button.buttons && button.buttons.length;
 
-    if (hasCustomComponent) {
-      return _getCustomButtonComponent.call(_this, button, activeButtons);
-    }
+    // if (hasCustomComponent) {
+    //   return _getCustomButtonComponent.call(_this, button, activeButtons);
+    // }
 
-    if (hasNestedButtonDefinitions) {
-      return _getExpandableButtonComponent.call(_this, button, activeButtons);
-    }
+    // if (hasNestedButtonDefinitions) {
+    //   return _getExpandableButtonComponent.call(_this, button, activeButtons);
+    // }
 
-    return _getDefaultButtonComponent.call(_this, button, activeButtons);
+    // return _getDefaultButtonComponent.call(_this, button, activeButtons);
   });
 }
 
@@ -326,16 +326,16 @@ function _getVisibleToolbarButtons() {
   const toolbarModules = extensionManager.modules[MODULE_TYPES.TOOLBAR];
   const toolbarButtonDefinitions = [];
 
-  toolbarModules.forEach(extension => {
-    const { definitions, defaultContext } = extension.module;
-    definitions.forEach(definition => {
-      const context = definition.context || defaultContext;
+  // toolbarModules.forEach(extension => {
+  //   const { definitions, defaultContext } = extension.module;
+  //   definitions.forEach(definition => {
+  //     const context = definition.context || defaultContext;
 
-      if (this.props.activeContexts.includes(context)) {
-        toolbarButtonDefinitions.push(definition);
-      }
-    });
-  });
+  //     if (this.props.activeContexts.includes(context)) {
+  //       toolbarButtonDefinitions.push(definition);
+  //     }
+  //   });
+  // });
 
   return toolbarButtonDefinitions;
 }
@@ -382,5 +382,5 @@ function _handleBuiltIn(button) {
 }
 
 export default withTranslation(['Common', 'ViewportDownloadForm'])(
-  withModal(withDialog(withAppContext(ToolbarRow)))
+  withModal(withDialog(withAppContext(SlideLeftPanel)))
 );
